@@ -10,6 +10,7 @@ import Show from "components/Appointment/Show";
 import Confirm from "components/Appointment/Confirm";
 import Status from "components/Appointment/Status";
 import Error from "components/Appointment/Error";
+import Form from "components/Appointment/Form";
 
 import { storiesOf } from "@storybook/react";
 import { action } from "@storybook/addon-actions";
@@ -200,5 +201,21 @@ storiesOf("Appointment", module)
     <Error
       message="Could not delete appointment."
       onClose={action("onClose")}
+    />
+  ))
+  .add("Form Create", () => (
+    <Form
+      interviewers={interviewers}
+      onSave={action("onSave")}
+      onCancel={action("onCancel")}
+    />
+  ))
+  .add("Form Edit", () => (
+    <Form
+      name="Joel Hagan"
+      interviewers={interviewers}
+      value={3}
+      onSave={action("onSave")}
+      onCancel={action("onCancel")}
     />
   ));
