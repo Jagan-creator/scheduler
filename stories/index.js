@@ -86,22 +86,22 @@ storiesOf("DayList", module)
   .add("Monday", () => (
     <DayList
       days={days}
-      day={"Monday"}
-      setDay={action("setDay")}
+      value={"Monday"}
+      onChange={action("setDay")}
     />
   ))
   .add("Tuesday", () => (
     <DayList
       days={days}
-      day={"Tuesday"}
-      setDay={action("setDay")}
+      value={"Tuesday"}
+      onChange={action("setDay")}
     />
   ))
   .add("Wednesday", () => (
     <DayList
       days={days}
-      day={"Wednesday"}
-      setDay={action("setDay")}
+      value={"Wednesday"}
+      onChange={action("setDay")}
     />
   ));
 
@@ -155,13 +155,12 @@ storiesOf("InterviewerList", module)
   .add("Selected", () => (
     <InterviewerList
       interviewers={interviewers}
-      interviewer={3}
+      value={3}
     />
   ))
   .add("Clickable", () => (
-    <InterviewerListItem
-      name={interviewer.name}
-      avatar={interviewer.avatar}
-      setInterviewer={() => action("setInterviewer")(interviewer.id)}
+    <InterviewerList
+      interviewers={interviewers}
+      onChange={action("setInterviewer")}
     />
   ));
