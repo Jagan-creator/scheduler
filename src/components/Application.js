@@ -63,7 +63,7 @@ export default function Application(props) {
               key={appointment.id}
               id={appointment.id}
               time={appointment.time}
-              interview={appointment.interview}
+              interview={interview}
             />
           );
         })}
