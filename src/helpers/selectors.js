@@ -26,3 +26,20 @@ export function getInterview(state, interview) {
     return null;
   }
 }
+
+export function getInterviewersForDay(state, dayCheck) {
+  const results = [];
+  let interviewers = [];
+
+  state.days.forEach((day) => {
+    if (day.name === dayCheck) {
+      interviewers = day.interviewers;
+    }
+  });
+
+  interviewers.forEach((interviewer) => {
+    results.push(interviewer);
+  });
+
+  return results;
+}
