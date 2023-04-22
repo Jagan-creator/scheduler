@@ -3,14 +3,16 @@ import Button from "components/Button";
 import InterviewerList from "components/InterviewerList";
 
 export default function Form(props) {
-  const [currentStudent, setStudent] = useState(props.student || "");
-  const [currentInterviewer, setInterviewer] = useState(
-    props.interviewer || null
-  );
+  const [student, setStudent] = useState(props.student || "");
+  const [interviewer, setInterviewer] = useState(props.interviewer || null);
 
   const reset = () => {
     setStudent("");
     setInterviewer("null");
+  };
+
+  const save = () => {
+    props.onSave(student, interviewer);
   };
 
   function cancel() {
@@ -29,14 +31,14 @@ export default function Form(props) {
             className="appointment__create-input text--semi-bold"
             name="name"
             type="text"
-            value={currentStudent}
+            value={student}
             placeholder="enter student name here"
             onChange={(e) => setStudent(e.target.value)}
           />
         </form>
         <InterviewerList
           interviewers={props.interviewers}
-          value={currentInterviewer}
+          value={interviewer}
           onChange={setInterviewer}
         />
       </section>
@@ -50,7 +52,7 @@ export default function Form(props) {
           </Button>
           <Button
             confirm
-            onClick={(e) => props.onSave(currentStudent, currentInterviewer)}
+            onClick={(e) => save(student, interviewer)}
           >
             Save
           </Button>
