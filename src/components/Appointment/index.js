@@ -1,12 +1,13 @@
 import React from "react";
-import "./styles.scss";
+import useVisualMode from "hooks/useVisualMode";
 import Header from "./Header";
 import Show from "./Show";
 import Empty from "./Empty";
 import Form from "./Form";
 import Status from "./Status";
 import Confirm from "./Confirm";
-import useVisualMode from "hooks/useVisualMode";
+import Error from "./Error";
+import "./styles.scss";
 
 export default function Appointment(props) {
   const EMPTY = "EMPTY";
@@ -16,6 +17,8 @@ export default function Appointment(props) {
   const DELETING = "DELETING";
   const CONFIRM = "CONFIRM";
   const EDIT = "EDIT";
+  const ERROR_SAVE = "ERROR_SAVE";
+  const ERROR_DELETE = "ERROR_DELETE";
 
   const { mode, transition, back } = useVisualMode(
     props.interview ? SHOW : EMPTY
@@ -26,18 +29,17 @@ export default function Appointment(props) {
   }
 
   function save(name, interviewer) {
-    transition(SAVING);
-
     const interview = {
       student: name,
       interviewer,
     };
 
-    props.bookInterview(props.id, interview);
+    transition(SAVING);
 
-    setTimeout(() => {
-      transition(SHOW);
-    }, 1000);
+    props
+      .bookInterview(props.id, interview)
+      .then(() => transition(SHOW))
+      .catch((error) => transition(ERROR_SAVE, true));
   }
 
   function deleteInterview(interview) {
@@ -46,13 +48,11 @@ export default function Appointment(props) {
   }
 
   function confirmDelete() {
-    transition(DELETING);
-
-    props.cancelInterview(props.id);
-
-    setTimeout(() => {
-      transition(EMPTY);
-    }, 1000);
+    transition(DELETING, true);
+    props
+      .cancelInterview(props.id)
+      .then(() => transition(EMPTY))
+      .catch((error) => transition(ERROR_DELETE, true));
   }
 
   return (
@@ -90,6 +90,18 @@ export default function Appointment(props) {
           interviewers={props.interviewers}
           onCancel={() => transition(SHOW)}
           onSave={save}
+        />
+      )}
+      {mode === ERROR_SAVE && (
+        <Error
+          message={"Unable to save please try again"}
+          onClose={back}
+        />
+      )}
+      {mode === ERROR_DELETE && (
+        <Error
+          message={"Unable to delete please try again"}
+          onClose={back}
         />
       )}
     </>
