@@ -22,13 +22,18 @@ export default function Appointment(props) {
   }
 
   function save(name, interviewer) {
+    transition(SAVING);
+
     const interview = {
       student: name,
       interviewer,
     };
-    transition(SAVING);
+
     props.bookInterview(props.id, interview);
-    transition(SHOW);
+
+    setTimeout(() => {
+      transition(SHOW);
+    }, 1000);
   }
 
   return (
@@ -48,7 +53,7 @@ export default function Appointment(props) {
           onSave={save}
         />
       )}
-      {mode === SAVING && <Status />}
+      {mode === SAVING && <Status message="Saving" />}
     </>
   );
 }
