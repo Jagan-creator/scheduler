@@ -25,17 +25,34 @@ export default function useApplicationData() {
     });
   }, []);
 
-  const spotUpdate = (update) => {
-    state.days.forEach((element) => {
-      if (state.day === element.name) {
-        if (update) {
-          element.spots++;
-        } else {
-          element.spots--;
-        }
-      }
-    });
+  const calcSpotsRemaining = (appointments, appointmentID) => {
+    const day = state.days.find((day) =>
+      day.appointments.includes(appointmentID)
+    );
+
+    const spots = day.appointments.filter(
+      (id) => appointments[id].interview === null
+    ).length;
+
+    return state.days.map((day) =>
+      day.appointments.includes(appointmentID) ? { ...day, spots } : day
+    );
+
+    // const dayAppointmentID = day.appointments;
+    // let spots = 0;
+
+    // for (let appointment in appointments) {
+    //   if (dayAppointmentID.includes(appointment.id)) {
+    //     if (appointment.interview === null) {
+    //       spots++;
+    //     }
+    //   }
+    // }
+    // console.log("day", day);
+    // console.log("appointment", appointments);
+    // return { ...day, spots };
   };
+
   function bookInterview(id, interview) {
     const appointment = {
       ...state.appointments[id],
@@ -48,19 +65,37 @@ export default function useApplicationData() {
     };
 
     return axios.put(`/api/appointments/${id}`, appointment).then(() => {
-      spotUpdate();
-      setState({
-        ...state,
-        appointments,
+      setState((prev) => {
+        const newState = {
+          ...prev,
+          appointments,
+          days: calcSpotsRemaining(appointments, id),
+        };
+
+        return newState;
       });
     });
   }
 
-  function cancelInterview(id) {
+  function deleteInterview(id) {
     return axios.delete(`/api/appointments/${id}`).then(() => {
-      spotUpdate();
-      setState({
-        ...state,
+      const appointment = {
+        ...state.appointments[id],
+        interview: null,
+      };
+
+      const appointments = {
+        ...state.appointments,
+        [id]: appointment,
+      };
+
+      setState((prev) => {
+        const newState = {
+          ...prev,
+          appointments,
+          days: calcSpotsRemaining(appointments, id),
+        };
+        return newState;
       });
     });
   }
@@ -69,6 +104,6 @@ export default function useApplicationData() {
     state,
     setDay,
     bookInterview,
-    cancelInterview,
+    deleteInterview,
   };
 }
