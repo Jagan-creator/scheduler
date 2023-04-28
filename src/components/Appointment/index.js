@@ -56,7 +56,7 @@ export default function Appointment(props) {
   }
 
   return (
-    <>
+    <article data-testid="appointment">
       <Header time={props.time} />
       {mode === EMPTY && <Empty onAdd={(event) => transition(CREATE)} />}
       {mode === SHOW && (
@@ -104,6 +104,6 @@ export default function Appointment(props) {
           onClose={back}
         />
       )}
-    </>
+    </article>
   );
 }
