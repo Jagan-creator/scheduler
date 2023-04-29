@@ -37,20 +37,6 @@ export default function useApplicationData() {
     return state.days.map((day) =>
       day.appointments.includes(appointmentID) ? { ...day, spots } : day
     );
-
-    // const dayAppointmentID = day.appointments;
-    // let spots = 0;
-
-    // for (let appointment in appointments) {
-    //   if (dayAppointmentID.includes(appointment.id)) {
-    //     if (appointment.interview === null) {
-    //       spots++;
-    //     }
-    //   }
-    // }
-    // console.log("day", day);
-    // console.log("appointment", appointments);
-    // return { ...day, spots };
   };
 
   function bookInterview(id, interview) {
